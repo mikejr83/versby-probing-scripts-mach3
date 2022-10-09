@@ -96,6 +96,16 @@ CurrentFeed = GetOEMDRO(818) 'FeedRate()
 
 	'Save Z start position
 	Zpos = GetOEMDRO(802)
+	Dim ClearanceMovement
+	ClearanceMovement = Abs(-EdgeLength-XYclearance)
+	If ClearanceMovement > DMax Then
+		Dim ContRes
+		ConRes = MachMsg("The Edge Length + XY Clearance is greater than the search length. The search length will be set to " & ClearanceMovement & ". Continue?", "Clearance Length Check", 1)
+		If ConRes = 2 Then
+			Exit Sub
+		End If
+		DMax = ClearanceMovement
+	End If
 	'Safe Go to X+ start position
 	If Not SafeMoveX((-XYclearance-EdgeLength),FRate1) Then
 		PushMSG("Manually return to the starting position and repeat the search")
@@ -113,16 +123,16 @@ CurrentFeed = GetOEMDRO(818) 'FeedRate()
 	'Indicate result
 	SetUserLabel (4, Format(XHit+ProbeD/2, "####0.000"))
 	'Safe back to start position
-	If Not SafeMoveZ((Zdepth),CurrentFeed) Then 
+	If Not SafeMoveZ((Zdepth),FRate1) Then 
 		PushMSG("Return to the search position is interrupted")
 		Exit Sub 
 	End If
 	'Move to X- start position
-	If Not SafeMoveX(XHit+ProbeD/2-GetDRO(0)+2*EdgeLength+XYclearance,CurrentFeed) Then 
+	If Not SafeMoveX(XHit+ProbeD/2-GetDRO(0)+2*EdgeLength+XYclearance,FRate1) Then 
 		PushMSG("Return to the search position is interrupted")
 		Exit Sub 
 	End If
-	If Not SafeMoveZ((-Zdepth),CurrentFeed) Then 
+	If Not SafeMoveZ((-Zdepth),FRate1) Then 
 		PushMSG("Manually return to the starting position and repeat the search")
 		Exit Sub 
 	End If
@@ -137,12 +147,12 @@ CurrentFeed = GetOEMDRO(818) 'FeedRate()
 	SetUserLabel (5, Format(Abs(XbHit-XHit-ProbeD), "####0.000"))
 	PushMSG("X+ = " & (XHit+ProbeD/2) & ", Xc = " & (XbHit+XHit)/2 & ", X- = " & (XbHit-ProbeD/2) & ", Lx = " & Abs(XbHit-XHit-ProbeD))
 	'Safe back to start position
-	If Not SafeMoveZ((Zdepth),CurrentFeed) Then 
+	If Not SafeMoveZ((Zdepth),FRate1) Then 
 		PushMSG("Return to the search position is interrupted")
 		Exit Sub 
 	End If
 	'Move to Center point
-	If Not SafeMoveX((XbHit+XHit)/2-GetDRO(0),CurrentFeed) Then 
+	If Not SafeMoveX((XbHit+XHit)/2-GetDRO(0),FRate1) Then 
 		PushMSG("Return to the search position is interrupted")
 		Exit Sub 
 	End If

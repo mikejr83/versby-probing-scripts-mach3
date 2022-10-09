@@ -1,4 +1,4 @@
- Sub Main()
+Sub Main()
 
 ' Y-Y+ Outside Probing Script
 ' Author verser
@@ -95,13 +95,23 @@ CurrentFeed = GetOEMDRO(818) 'FeedRate()
 'main working
 
 	'Save Z start position
-	Zpos = GetDRO(2)
+	Zpos = GetOEMDRO(802)
+	Dim ClearanceMovement
+	ClearanceMovement = Abs(-EdgeLength-XYclearance)
+	If ClearanceMovement > DMax Then
+		Dim ContRes
+		ConRes = MachMsg("The Edge Length + XY Clearance is greater than the search length. The search length will be set to " & ClearanceMovement & ". Continue?", "Clearance Length Check", 1)
+		If ConRes = 2 Then
+			Exit Sub
+		End If
+		DMax = ClearanceMovement
+	End If
 	'Safe Go to Y- start position
-	If Not SafeMoveY((XYclearance+EdgeLength),CurrentFeed) Then
+	If Not SafeMoveY((XYclearance+EdgeLength),FRate1) Then
 		PushMSG("Manually return to the starting position and repeat the search")
 		Exit Sub 
 	End If
-	If Not SafeMoveZ((-Zdepth),CurrentFeed) Then 
+	If Not SafeMoveZ((-Zdepth),FRate1) Then 
 		PushMSG("Manually return to the starting position and repeat the search")
 		Exit Sub 
 	End If
@@ -113,16 +123,16 @@ CurrentFeed = GetOEMDRO(818) 'FeedRate()
 	'Indicate result
 	SetUserLabel (6, Format(YHit-ProbeD/2, "####0.000"))
 	'Safe back to start position
-	If Not SafeMoveZ((Zdepth),CurrentFeed) Then 
+	If Not SafeMoveZ((Zdepth),FRate1) Then 
 		PushMSG("Return to the search position is interrupted")
 		Exit Sub 
 	End If
 	'Move to Y+ start position
-	If Not SafeMoveY(YHit+ProbeD/2-GetDRO(1)-2*EdgeLength-XYclearance,CurrentFeed) Then 
+	If Not SafeMoveY(YHit+ProbeD/2-GetOEMDRO(801)-2*EdgeLength-XYclearance,FRate1) Then 
 		PushMSG("Return to the search position is interrupted")
 		Exit Sub 
 	End If
-	If Not SafeMoveZ((-Zdepth),CurrentFeed) Then 
+	If Not SafeMoveZ((-Zdepth),FRate1) Then 
 		PushMSG("Manually return to the starting position and repeat the search")
 		Exit Sub 
 	End If
@@ -137,19 +147,19 @@ CurrentFeed = GetOEMDRO(818) 'FeedRate()
 	SetUserLabel (9, Format(Abs(YbHit-YHit+ProbeD), "####0.000"))
 	PushMSG("Y+ = " & (YbHit+ProbeD/2) & ", Yc = " & (YbHit+YHit)/2 & ", Y- = " & YHit-ProbeD/2 & ", Ly = " & Abs(YbHit-YHit+ProbeD))
 	'Safe back to start position
-	If Not SafeMoveZ((Zdepth),CurrentFeed) Then 
+	If Not SafeMoveZ((Zdepth),FRate1) Then 
 		PushMSG("Return to the search position is interrupted")
 		Exit Sub 
 	End If
 	'Move to Center point
-	If Not SafeMoveY((YbHit+YHit)/2-GetDRO(1),CurrentFeed) Then 
+	If Not SafeMoveY((YbHit+YHit)/2-GetOEMDRO(801),FRate1) Then 
 		PushMSG("Return to the search position is interrupted")
 		Exit Sub 
 	End If
 
 
 	If AutoZeroFlag = 1 Then 
-		SetOEMDRO(801, GetDRO(1)-(YbHit+YHit)/2) 
+		SetOEMDRO(801, GetOEMDRO(801)-(YbHit+YHit)/2) 
 		Sleep(150)
 	End If
 
@@ -175,7 +185,7 @@ Function ProbeY(Dir,DMax,Latch,FRate1,FRate2)
 	Dim Ftmp
 	Dim AbsIncF
 	ProbeY=999999
-	Ystart = GetDRO(1)
+	Ystart = GetOEMDRO(801)
 	Ftmp = FeedRate() 'FeedRate()
 	AbsIncF=GetOEMLED(49)
 	'Fast Probe Y
@@ -186,7 +196,7 @@ Function ProbeY(Dir,DMax,Latch,FRate1,FRate2)
 	Code "G31 Y" & (Dir*DMax)
 	While IsMoving()
 	Wend
-	Res = GetVar(2001)
+	Res = GetOEMDRO(801)
 '	PushMSG("Res=" & Res &", Ystart=" & Ystart & ", DMax=" & DMax & ", FRate1=" & FRate1)
 	If Abs(Res - Ystart - Dir*DMax) < 0.01 Then
 		PushMSG("Error: G31 Y search finished without making contact")
@@ -197,19 +207,19 @@ Function ProbeY(Dir,DMax,Latch,FRate1,FRate2)
 		Exit Function 
 	End If 
 	'Move back
-	Code "G00 Y" & -Dir*Latch
+	Code "G01 Y" & -Dir*Latch
 	While IsMoving()
 	Wend
 	Call WaitProbeReady()	
 	'Latch Probe Y
-	Ystart = GetDRO(1)
+	Ystart = GetOEMDRO(801)
 	Code "F" & FRate2
 	Sleep(125)
 	Code "G31 Y" & Dir*Latch*2
 	While IsMoving()
 	Wend
 	'Save result
-	Res = GetVar(2001)
+	Res = GetOEMDRO(801)
 	If Abs(Res - Ystart - Dir*Latch*2) < 0.01 Then
 		PushMSG("Error: G31 Y latch finished without making contact")
 		PushMSG("Manually return to the starting position and repeat the search")
@@ -218,7 +228,9 @@ Function ProbeY(Dir,DMax,Latch,FRate1,FRate2)
 		Sleep(125)
 		Exit Function 
 	End If 
-	Code "G00 Y" & -Dir*Latch
+	Code "F" & FRate1
+	Sleep(125)
+	Code "G01 Y" & -Dir*Latch
 	While IsMoving()
 	Wend
 	Call SetLED49(AbsIncF)
@@ -232,7 +244,7 @@ Function SafeMoveY(Y1, F1) As Boolean 'return 1 (error) if probe tripped
 	Dim Ftmp
 	Dim AbsIncF
 	SafeMoveY=True
-	Ystart = GetDRO(1)
+	Ystart = GetOEMDRO(801)
 	Ftmp = FeedRate() 'FeedRate()
 	AbsIncF=GetOEMLED(49)
 	Code "G91"
@@ -242,7 +254,7 @@ Function SafeMoveY(Y1, F1) As Boolean 'return 1 (error) if probe tripped
 	Code "G31 Y" & Y1
 	While IsMoving()
 	Wend
-	YHit = GetVar(2001)
+	YHit = GetOEMDRO(801)
 	Call SetLED49(AbsIncF)
 	If Abs(YHit - Ystart - Y1) > 0.01 Then
 		SafeMoveY=False
@@ -257,7 +269,7 @@ Function SafeMoveZ(Z1, F1) As Boolean 'return 1 (error) if probe tripped
 	Dim Ftmp
 	Dim AbsIncF
 	SafeMoveZ=True
-	Zstart = GetDRO(2)
+	Zstart = GetOEMDRO(802)
 	Ftmp = FeedRate() 'FeedRate()
 	AbsIncF=GetOEMLED(49)
 	Code "G91"
@@ -268,7 +280,7 @@ Function SafeMoveZ(Z1, F1) As Boolean 'return 1 (error) if probe tripped
 	While IsMoving()
 		Sleep(100)
 	Wend
-	ZHit = GetVar(2002)
+	ZHit = GetOEMDRO(802)
 	Call SetLED49(AbsIncF)
 	If Abs(ZHit - Zstart - Z1 -GetOEMDRO(42)) > 0.01 Then
 		SafeMoveZ=False
@@ -302,4 +314,4 @@ Sub SetLED49(Flag)
 		Code "G90"
 		Sleep(125)
 	End If
-End Sub 
+End Sub
