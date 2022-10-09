@@ -4,6 +4,10 @@ The following changes are for the vers.by probing scripts used in the Physics An
 
 You can see the Physics Anonymous Mach3 screenset in use here: https://youtu.be/7o_V_1AIaXE
 
+Original Physics Anonymous screenset can be found here: http://www.physanon.com/pa-mach-3-screen-set/
+
+Vers.by probing wizard (where the probing routines originated): https://vers.by/en/blog/useful-articles/probe_wizard
+
 **IMPORTANT:** Before you use these scripts I suggest reading the section on using them below. I am not responsible for broken probes and probing tips. The YouTube video describing the original screenset for Mach3 that these were pulled from did not go into detail on how to use them. If you're not accoustomed to the way these probe you could damage your probe or probe stylus/tip.
 
 ## Differences From The vers.by Scripts
