@@ -110,7 +110,6 @@ CurrentFeed = GetOEMDRO(818) 'FeedRate()
 		Exit Sub 
 	End If
 	'Indicate result
-	XHit = GetOEMDRO(800)
 	SetUserLabel (4, Format(XHit+ProbeD/2, "####0.000"))
 	PushMSG("X+ = " & (XHit+ProbeD/2))
 	'Safe back to start position
