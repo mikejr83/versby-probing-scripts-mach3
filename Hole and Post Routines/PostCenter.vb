@@ -109,11 +109,11 @@ CurrentFeed = GetOEMDRO(818) 'FeedRate()
 		DMax = ClearanceMovement
 	End If
 	'Safe Go to X+ start position
-	If Not SafeMoveX((-EdgeLength-XYclearance),CurrentFeed) Then
+	If Not SafeMoveX((-EdgeLength-XYclearance),FRate1) Then
 		PushMSG("Manually return to the starting position and repeat the search")
 		Exit Sub 
 	End If
-	If Not SafeMoveZ((-Zdepth),CurrentFeed) Then 
+	If Not SafeMoveZ((-Zdepth),FRate1) Then 
 		PushMSG("Manually return to the starting position and repeat the search")
 		Exit Sub 
 	End If
@@ -125,16 +125,16 @@ CurrentFeed = GetOEMDRO(818) 'FeedRate()
 	'Indicate result
 	SetUserLabel (4, Format(XHit+ProbeD/2, "####0.000"))
 	'Safe back to start position
-	If Not SafeMoveZ((Zdepth),CurrentFeed) Then 
+	If Not SafeMoveZ((Zdepth),FRate1) Then 
 		PushMSG("Return to the search position is interrupted")
 		Exit Sub 
 	End If
 	'Move to X- start position
-	If Not SafeMoveX(XHit+ProbeD/2-GetOEMDRO(800)+EdgeLength+XYclearance,CurrentFeed) Then 
+	If Not SafeMoveX(XHit+ProbeD/2-GetOEMDRO(800)+EdgeLength+XYclearance,FRate1) Then 
 		PushMSG("Return to the search position is interrupted")
 		Exit Sub 
 	End If
-	If Not SafeMoveZ((-Zdepth),CurrentFeed) Then 
+	If Not SafeMoveZ((-Zdepth),FRate1) Then 
 		PushMSG("Manually return to the starting position and repeat the search")
 		Exit Sub 
 	End If
@@ -149,22 +149,22 @@ CurrentFeed = GetOEMDRO(818) 'FeedRate()
 	SetUserLabel (5, Format(Abs(XbHit-XHit-ProbeD), "####0.000"))
 	PushMSG("X+ = " & (XHit+ProbeD/2) & ", Xc = " & (XbHit+XHit)/2 & ", X- = " & (XbHit-ProbeD/2) & ", Lx = " & Abs(XbHit-XHit-ProbeD))
 	'Safe back to start position
-	If Not SafeMoveZ((Zdepth),CurrentFeed) Then 
+	If Not SafeMoveZ((Zdepth),FRate1) Then 
 		PushMSG("Return to the search position is interrupted")
 		Exit Sub 
 	End If
 	'Move to Center point
-	If Not SafeMoveX((XbHit+XHit)/2-GetOEMDRO(800),CurrentFeed) Then 
+	If Not SafeMoveX((XbHit+XHit)/2-GetOEMDRO(800),FRate1) Then 
 		PushMSG("Return to the search position is interrupted")
 		Exit Sub 
 	End If
 
 	'Safe Go to Y- start position
-	If Not SafeMoveY((EdgeLength+XYclearance),CurrentFeed) Then
+	If Not SafeMoveY((EdgeLength+XYclearance),FRate1) Then
 		PushMSG("Manually return to the starting position and repeat the search")
 		Exit Sub 
 	End If
-	If Not SafeMoveZ((-Zdepth),CurrentFeed) Then 
+	If Not SafeMoveZ((-Zdepth),FRate1) Then 
 		PushMSG("Manually return to the starting position and repeat the search")
 		Exit Sub 
 	End If
@@ -176,16 +176,16 @@ CurrentFeed = GetOEMDRO(818) 'FeedRate()
 	'Indicate result
 	SetUserLabel (6, Format(YHit-ProbeD/2, "####0.000"))
 	'Safe back to start position
-	If Not SafeMoveZ((Zdepth),CurrentFeed) Then 
+	If Not SafeMoveZ((Zdepth),FRate1) Then 
 		PushMSG("Return to the search position is interrupted")
 		Exit Sub 
 	End If
 	'Move to Y+ start position
-	If Not SafeMoveY(YHit+ProbeD/2-GetOEMDRO(801)-EdgeLength-XYclearance,CurrentFeed) Then 
+	If Not SafeMoveY(YHit+ProbeD/2-GetOEMDRO(1)-EdgeLength-XYclearance,FRate1) Then 
 		PushMSG("Return to the search position is interrupted")
 		Exit Sub 
 	End If
-	If Not SafeMoveZ((-Zdepth),CurrentFeed) Then 
+	If Not SafeMoveZ((-Zdepth),FRate1) Then 
 		PushMSG("Manually return to the starting position and repeat the search")
 		Exit Sub 
 	End If
@@ -202,12 +202,12 @@ CurrentFeed = GetOEMDRO(818) 'FeedRate()
 	SetUserLabel (11, Format(Diameter, "####0.000"))
 	PushMSG("Y+ = " & (YbHit+ProbeD/2) & ", Yc = " & (YbHit+YHit)/2 & ", Y- = " & YHit-ProbeD/2 & ", Ly = " & Abs(YbHit-YHit+ProbeD) & ", Diam = " & Diameter)
 	'Safe back to start position
-	If Not SafeMoveZ((Zdepth),CurrentFeed) Then 
+	If Not SafeMoveZ((Zdepth),FRate1) Then 
 		PushMSG("Return to the search position is interrupted")
 		Exit Sub 
 	End If
 	'Move to Center point
-	If Not SafeMoveY((YbHit+YHit)/2-GetOEMDRO(801),CurrentFeed) Then 
+	If Not SafeMoveY((YbHit+YHit)/2-GetOEMDRO(801),FRate1) Then 
 		PushMSG("Return to the search position is interrupted")
 		Exit Sub 
 	End If
@@ -455,6 +455,3 @@ Sub SetLED49(Flag)
 		Sleep(125)
 	End If
 End Sub
-
- 
-
