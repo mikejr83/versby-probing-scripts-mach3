@@ -181,7 +181,7 @@ CurrentFeed = GetOEMDRO(818) 'FeedRate()
 		Exit Sub 
 	End If
 	'Move to Y+ start position
-	If Not SafeMoveY(YHit+ProbeD/2-GetOEMDRO(1)-EdgeLength-XYclearance,FRate1) Then 
+	If Not SafeMoveY(YHit+ProbeD/2-GetOEMDRO(801)-EdgeLength-XYclearance,FRate1) Then 
 		PushMSG("Return to the search position is interrupted")
 		Exit Sub 
 	End If
