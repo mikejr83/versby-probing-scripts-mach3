@@ -33,17 +33,17 @@ If DiagRes = 2 Then
 End If
 
 'Init vars
-FRate1 = abs(GetUserDRO(1821))
-FRate2 = abs(GetUserDRO(1822))
-DMax = abs(GetUserDRO(1823))
+FRate1 = Abs(GetUserDRO(1821))
+FRate2 = Abs(GetUserDRO(1822))
+DMax = Abs(GetUserDRO(1823))
 ToolNo = GetCurrentTool()
 ToolD = GetToolParam(ToolNo,1)
-   If GetUserDRO(1829) = 0 then	
+   If GetUserDRO(1829) = 0 Then	
    	ProbeD = ToolD
 	Else 
 	ProbeD = GetUserDRO(1829)
    End If
-Latch = abs(GetUserDRO(1825))
+Latch = Abs(GetUserDRO(1825))
 XYclearance = GetUserDRO(1826)
 EdgeLength = GetUserDRO(1828)
 Zdepth = GetUserDRO(1830)
@@ -425,3 +425,5 @@ Sub SetLED49(Flag)
 		Sleep(125)
 	End If
 End Sub
+ 
+
