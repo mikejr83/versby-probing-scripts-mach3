@@ -120,6 +120,10 @@ My tool change procedure is based on never changing the currently selected tool 
 
 **REMEMBER, it is important to adjust the absolute positioning for where the tool setter is located in the machine in both files!**
 
+## Installation
+
+The `M6Start.m1s` and `M6End.m1s` files should be copied into the `C:\Mach\macros\machine_name` folder where "machine_name" is the profile of the machine you're using in Mach.
+
 ## Thanks
 
 Thank you to Physics Anonymous for the screenset. This screenset actually makes Mach3 usable. Thank you for providing a great interface.
