@@ -33,10 +33,11 @@ Dim CurrentSpindle
 
 
 'Init vars
-ToolChangeAbsXPos = 307
-ToolChangeAbsYPos = 250
-ToolSetterAbsXPos = 307
-ToolSetterAbsYPos = 250
+' ADJUST THE FOLLOWING ACCORDING TO YOUR MACHINE!
+ToolChangeAbsXPos = 310
+ToolChangeAbsYPos = 240
+ToolSetterAbsXPos = 310
+ToolSetterAbsYPos = 240
 ZAbsSafePlane = 0
 ZAbsStartPos = 0
 ZMaxDist = 150

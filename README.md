@@ -101,6 +101,25 @@ One thing to remember is that most of the scripts are setup in a way that they a
 
 For example, if probing the outside right face of a part place the tip of the probe over the part just to the inside/left of the face. Then click the outside right button on the probing tab. This will move the probe to the right, then down Z, and then towards the face.
 
+# Tool Change
+
+I've included tool change scripts that I use for my tool setter. These scripts use changes in `M6Start.m1s` and `M6End.m1s`.
+
+My tool change procedure is based on never changing the currently selected tool in Mach. The selected tool always is set to T0. My CNC uses a collet system where the height of the tool is not repeatable when changing tools. The routine works like this:
+
+1. Mach detects a change in tool T0 -> to T*x*.
+2. Preprocessor has inserted a M6 command.
+3. The processing of commands **stops**. *At this point no change should be made to the current tool!*
+4. The `M6Start.m1s` code runs as a "before tool has changed" set of commands.
+5. Mach moves to an absolute position on the machine. *This is defined at the top of the file.*
+6. Mach finds the current *Z* position where the tool touches the tool setter.
+7. Mach now stops and expects a manual tool change to occur.
+8. The operator is expected to insert the tool for the next op into the machine and then press the play/continue button.
+9. Mach now finds the new *Z* position where the tool touches the tool setter. 
+10. The difference in the *Z* position for the previous tool and the new tool is computed and the *Z* position for the current coordinate system is adjusted by the amount.
+
+**REMEMBER, it is important to adjust the absolute positioning for where the tool setter is located in the machine in both files!**
+
 ## Thanks
 
 Thank you to Physics Anonymous for the screenset. This screenset actually makes Mach3 usable. Thank you for providing a great interface.
