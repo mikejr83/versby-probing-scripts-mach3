@@ -41,6 +41,14 @@ On the probing screen you'll see four sections:
 
 ![Probe Button Locations](Images/ProbingScreen.png)
 
+* Use the Operator menu to select "Edit Button Script". 
+* It will appear as if nothing has happened. However, you can now select the button you want to edit with a click.
+* This will open up a VBScript editor. Paste the appropriate script for the button into the editor (overwrite everything).
+* Save and close the editor.
+* Mach3 will likely ask you to save your changes. Confirm that you want to save them.
+
+Once you've done that for all the buttons you should be good to go. I suggest getting a 123 block or something just heavy enough to not be moved when the probe hits it but light enough that if something goes awry that it won't damage things to test out the functionality.
+
 ### Outside and Inside Scripts
 
 For the "Outside" section see the "Outside Routines" folder. The scripts are numbered 1-8. The 1 script goes in the top left corner. The rest are located in a clockwise fashion from this initial button. Thus, 2 is the middle top, 3 is the top right, 4 the middle right, and so on. The "Inside" section is exactly the same and the scripts are located in the "Inside Routines" folder.
