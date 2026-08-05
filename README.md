@@ -138,4 +138,8 @@ Thank you to Physics Anonymous for the screenset. This screenset actually makes 
 
 Big thanks to vers.by for originally producing these probing routines.
 
+**Additional Contributors:**
+
+* qsc-thomasbauer - Bug fixes
+
 Also a big shoutout to the Discord users at 3D Misfits for help on this and many other projects!
