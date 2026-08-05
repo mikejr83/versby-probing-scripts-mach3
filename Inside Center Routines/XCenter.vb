@@ -98,11 +98,11 @@ CurrentFeed = GetOEMDRO(818) 'FeedRate()
 	Zpos = GetOEMDRO(802)
 	Xpos = GetOEMDRO(800)
 	'Safe Go to X- start position
-	'If Not SafeMoveX((XYclearance-EdgeLength),CurrentFeed) Then
+	'If Not SafeMoveX((XYclearance-EdgeLength),FRate1) Then
 	'	PushMSG("Manually return to the starting position and repeat the search")
 	'	Exit Sub 
 	'End If
-	'If Not SafeMoveZ((-Zdepth),CurrentFeed) Then 
+	'If Not SafeMoveZ((-Zdepth),FRate1) Then 
 	'	PushMSG("Manually return to the starting position and repeat the search")
 	'	Exit Sub 
 	'End If
@@ -129,7 +129,7 @@ CurrentFeed = GetOEMDRO(818) 'FeedRate()
 	SetUserLabel (5, Format(Abs(XbHit-XHit+ProbeD), "####0.000"))
 	PushMSG("X+ = " & (XBHit+ProbeD/2) & ", Xc = " & (XbHit+XHit)/2 & ", X- = " & (XHit-ProbeD/2) & ", Lx = " & Abs(XbHit-XHit+ProbeD))
 	'Safe back to start position
-	'If Not SafeMoveZ((Zdepth),CurrentFeed) Then 
+	'If Not SafeMoveZ((Zdepth),FRate1) Then 
 	'	PushMSG("Return to the search position is interrupted")
 	'	Exit Sub 
 	'End If
